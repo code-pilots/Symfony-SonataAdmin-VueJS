@@ -1,0 +1,14 @@
+{
+  "name": "Symfony3.3.2-VueJS2",
+  "version": "0.0.1",
+  "dependencies": {
+    "buefy": "^0.5.4"
+  },
+  "devDependencies": {
+    "@symfony/webpack-encore": "^0.16.0",
+    "node-sass": "^4.5.3",
+    "sass-loader": "^6.0.6",
+    "vue-loader": "^13.3.0",
+    "vue-template-compiler": "^2.5.2"
+  }
+}
