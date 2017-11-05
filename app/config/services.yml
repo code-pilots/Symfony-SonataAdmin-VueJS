@@ -34,16 +34,22 @@ services:
     #     arguments:
     #         $someArgument: 'some_value'
 
-    admin.franch:
-        class: AppBundle\Admin\FranchAdmin
-        arguments: [~, AppBundle\Entity\Franch, ~]
+    app.form.type.customProperty:
+        class: AppBundle\Form\Type\CustomPropertyType
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+            - { name: form.type, alias: custom_property_type }
+
+    admin.franchisee:
+        class: AppBundle\Admin\FranchiseeAdmin
+        arguments: [~, AppBundle\Entity\Franchisee, ~]
         tags:
             - { name: sonata.admin, manager_type: orm, label: Franch }
         public: true
 
-    admin.franch.entity.property:
-        class: AppBundle\Admin\FranchEntityPropertyAdmin
-        arguments: [~, AppBundle\Entity\FranchEntityProperty, ~]
+    admin.franchisee.entity.property:
+        class: AppBundle\Admin\FranchiseeEntityPropertyAdmin
+        arguments: [~, AppBundle\Entity\FranchiseeEntityProperty, ~]
         tags:
             - { name: sonata.admin, manager_type: orm, label: FranchEntityProperty }
         public: true

@@ -2,20 +2,65 @@
 
 namespace AppBundle\Admin;
 
+
+use AppBundle\Entity\FranchiseeEntityProperty;
+use AppBundle\Form\Type\CustomPropertyType;
+use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\CoreBundle\Validator\ErrorElement;
+use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
 
 class EmployeeAdmin extends AbstractAdmin
 {
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('firstname', 'text')
-            ->add('lastname', 'text')
-            ->add('middlename', 'text')
+            ->with('General')
+                ->add('firstname', 'text')
+                ->add('lastname', 'text')
+                ->add('middlename', 'text')
+            ->end()
         ;
+
+        $aProperties = $this->getProperties();
+
+        /** @var FranchiseeEntityProperty $oProperty */
+        $aPropertyKeys = [];
+        foreach ($aProperties as $oProperty) {
+            $aPropertyKeys[] = [
+                $oProperty->getCode(),
+                $oProperty->getPropertyType()->getCode(),
+                [
+                    'label' => $oProperty->getTitle(),
+                ]
+            ];
+        }
+
+        $formMapper
+            ->with('Дополнительные свойства')
+            ->add('propertyValues', 'sonata_type_immutable_array', [
+                'label' => false,
+                'keys' => $aPropertyKeys,
+            ])
+            ->end()
+        ;
+    }
+
+    public function validate(ErrorElement $errorElement, $object)
+    {
+        // conditional validation, see the related section for more information
+        // abstract cannot be empty when the post is enabled
+//        if ($object->getEnabled()) {
+            $errorElement
+                ->with('firstname')
+                    ->assertNotBlank(['message' => 'asdasd'])
+                    ->assertNotNull(['message' => 'ddddddd'])
+                ->end()
+            ;
+//        }
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
@@ -25,6 +70,18 @@ class EmployeeAdmin extends AbstractAdmin
             ->add('lastname')
             ->add('middlename')
         ;
+
+        $aProperties = $this->getProperties();
+
+        /** @var FranchiseeEntityProperty $oProperty */
+        foreach ($aProperties as $oProperty) {
+            $datagridMapper->add($oProperty->getCode(), CallbackFilter::class, [
+                'label' => $oProperty->getTitle(),
+                'callback' => [$this, 'getCustomPropertyFilter'],
+                'field_type' => 'text',
+                'advanced_filter' => false,
+            ]);
+        }
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -34,5 +91,39 @@ class EmployeeAdmin extends AbstractAdmin
             ->addIdentifier('lastname')
             ->addIdentifier('middlename')
         ;
+
+        $aProperties = $this->getProperties();
+
+        /** @var FranchiseeEntityProperty $oProperty */
+        foreach ($aProperties as $oProperty) {
+            $listMapper->add($oProperty->getCode(), 'string', [
+                'label' => $oProperty->getTitle(),
+                'template' => ':Admin/entity_list:custom_column.html.twig',
+            ]);
+        }
+
+        $listMapper->add('_action', 'actions', array(
+            'actions' => array(
+                'show' => array(),
+                'edit' => array(),
+                'delete' => array(),
+            )
+        ));
+    }
+
+    public function getCustomPropertyFilter($queryBuilder, $alias, $field, $value) {
+        if (!$value['value']['start']) return;
+        /** @var QueryBuilder $queryBuilder */
+        $queryBuilder->where($alias.'.createdAt BETWEEN :start_day AND :finish_day')
+            ->setParameters([
+                'start_day' => $value['value']['start'],
+                'finish_day' => $value['value']['end'],
+            ]);
+        return true;
+    }
+
+    private function getProperties() {
+        $em = $this->modelManager->getEntityManager(FranchiseeEntityProperty::class);
+        return $em->getRepository(FranchiseeEntityProperty::class)->findAll();
     }
 }

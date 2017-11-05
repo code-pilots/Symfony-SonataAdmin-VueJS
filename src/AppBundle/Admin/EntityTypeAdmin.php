@@ -29,7 +29,7 @@ class EntityTypeAdmin extends AbstractAdmin
     {
         $listMapper
             ->addIdentifier('code')
-            ->addIdentifier('title')
+            ->add('title')
         ;
     }
 }

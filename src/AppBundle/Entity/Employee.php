@@ -43,15 +43,22 @@ class Employee
     private $middlename;
 
     /**
-     * @ORM\OneToMany(targetEntity="EntityPropertyValue", mappedBy="entity")
+     * @ORM\OneToMany(targetEntity="EmployeePropertyValue", mappedBy="employee")
      */
-    private $propertyValues;
+    private $employeePropertyValues;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->employeePropertyValues = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
@@ -129,45 +136,38 @@ class Employee
     {
         return $this->middlename;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->propertyValues = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
-     * Add propertyValue
+     * Add employeePropertyValue
      *
-     * @param \AppBundle\Entity\EntityPropertyValue $propertyValue
+     * @param \AppBundle\Entity\EmployeePropertyValue $employeePropertyValue
      *
      * @return Employee
      */
-    public function addPropertyValue(\AppBundle\Entity\EntityPropertyValue $propertyValue)
+    public function addEmployeePropertyValue(\AppBundle\Entity\EmployeePropertyValue $employeePropertyValue)
     {
-        $this->propertyValues[] = $propertyValue;
+        $this->employeePropertyValues[] = $employeePropertyValue;
 
         return $this;
     }
 
     /**
-     * Remove propertyValue
+     * Remove employeePropertyValue
      *
-     * @param \AppBundle\Entity\EntityPropertyValue $propertyValue
+     * @param \AppBundle\Entity\EmployeePropertyValue $employeePropertyValue
      */
-    public function removePropertyValue(\AppBundle\Entity\EntityPropertyValue $propertyValue)
+    public function removeEmployeePropertyValue(\AppBundle\Entity\EmployeePropertyValue $employeePropertyValue)
     {
-        $this->propertyValues->removeElement($propertyValue);
+        $this->employeePropertyValues->removeElement($employeePropertyValue);
     }
 
     /**
-     * Get propertyValues
+     * Get employeePropertyValues
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getPropertyValues()
+    public function getEmployeePropertyValues()
     {
-        return $this->propertyValues;
+        return $this->employeePropertyValues;
     }
 }
