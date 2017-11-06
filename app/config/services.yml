@@ -44,33 +44,33 @@ services:
         class: AppBundle\Admin\FranchiseeAdmin
         arguments: [~, AppBundle\Entity\Franchisee, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, label: Franch }
+            - { name: sonata.admin, manager_type: orm, label: Франчайзи }
         public: true
 
-    admin.franchisee.entity.property:
-        class: AppBundle\Admin\FranchiseeEntityPropertyAdmin
-        arguments: [~, AppBundle\Entity\FranchiseeEntityProperty, ~]
+    admin.property:
+        class: AppBundle\Admin\PropertyAdmin
+        arguments: [~, AppBundle\Entity\Property, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, label: FranchEntityProperty }
+            - { name: sonata.admin, manager_type: orm, label: Свойства }
         public: true
 
     admin.entity.type:
         class: AppBundle\Admin\EntityTypeAdmin
         arguments: [~, AppBundle\Entity\EntityType, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, label: EntityType }
+            - { name: sonata.admin, manager_type: orm, label: Типы сущностей }
         public: true
 
     admin.property.type:
         class: AppBundle\Admin\PropertyTypeAdmin
         arguments: [~, AppBundle\Entity\PropertyType, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, label: PropertyType }
+            - { name: sonata.admin, manager_type: orm, label: Типы свойств }
         public: true
 
     admin.employee:
         class: AppBundle\Admin\EmployeeAdmin
         arguments: [~, AppBundle\Entity\Employee, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, label: Employee }
+            - { name: sonata.admin, manager_type: orm, label: Работники }
         public: true

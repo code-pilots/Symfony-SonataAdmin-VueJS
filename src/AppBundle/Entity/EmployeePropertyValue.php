@@ -36,11 +36,18 @@ class EmployeePropertyValue
     private $employee;
 
     /**
-     * @ORM\ManyToOne(targetEntity="FranchiseeEntityProperty")
-     * @ORM\JoinColumn(name="franchisee_entity_property_id", referencedColumnName="id")
+     * @var string
+     *
+     * @ORM\Column(name="entity_type_name", type="string", length=255, nullable=false)
      */
-    private $franchiseeEntityProperty;
+    private $entityTypeName;
 
+
+    public function __construct(Employee $employee, EntityType $entityType, $value) {
+        $this->employee = $employee;
+        $this->entityTypeName = $entityType;
+        $this->value = $value;
+    }
 
     /**
      * Get id
@@ -100,27 +107,4 @@ class EmployeePropertyValue
         return $this->employee;
     }
 
-    /**
-     * Set franchiseeEntityProperty
-     *
-     * @param \AppBundle\Entity\FranchiseeEntityProperty $franchiseeEntityProperty
-     *
-     * @return EmployeePropertyValue
-     */
-    public function setFranchiseeEntityProperty(\AppBundle\Entity\FranchiseeEntityProperty $franchiseeEntityProperty = null)
-    {
-        $this->franchiseeEntityProperty = $franchiseeEntityProperty;
-
-        return $this;
-    }
-
-    /**
-     * Get franchiseeEntityProperty
-     *
-     * @return \AppBundle\Entity\FranchiseeEntityProperty
-     */
-    public function getFranchiseeEntityProperty()
-    {
-        return $this->franchiseeEntityProperty;
-    }
 }
