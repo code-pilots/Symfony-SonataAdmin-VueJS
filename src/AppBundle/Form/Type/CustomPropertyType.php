@@ -3,7 +3,7 @@ namespace AppBundle\Form\Type;
 
 
 use AppBundle\Entity\EmployeePropertyValue;
-use AppBundle\Entity\FranchiseeEntityProperty;
+use AppBundle\Entity\FranchiseeEntityTypeProperty;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -22,7 +22,7 @@ class CustomPropertyType extends AbstractType
      * Получить список кастомных свойств по franch_id + entity_type_id + entity_id
      */
     public function buildForm(FormBuilderInterface $builder, array $options) {
-        $aProperties = $this->em->getRepository(FranchiseeEntityProperty::class)->findBy([
+        $aProperties = $this->em->getRepository(FranchiseeEntityTypeProperty::class)->findBy([
             'entityType' => 1,
         ]);
 
@@ -38,7 +38,7 @@ class CustomPropertyType extends AbstractType
             $aPropertyValuesByPropertyId[$iPropertyId] = $oPropertyValue;
         }
 
-        /** @var FranchiseeEntityProperty $oProperty */
+        /** @var FranchiseeEntityTypeProperty $oProperty */
         foreach ($aProperties as $oProperty) {
             $iPropertyId = $oProperty->getId();
             $mPropertyValue = isset($aPropertyValuesByPropertyId[$iPropertyId]) ? $aPropertyValuesByPropertyId[$iPropertyId]->getValue() : null;

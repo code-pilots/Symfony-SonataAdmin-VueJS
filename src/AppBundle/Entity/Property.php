@@ -48,6 +48,16 @@ class Property
      */
     private $propertyType;
 
+    /**
+     * @ORM\OneToMany(targetEntity="FranchiseeEntityTypeProperty", mappedBy="property", cascade={"ALL"})
+     */
+    private $properties;
+
+
+    public function __construct()
+    {
+        $this->properties = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -154,5 +164,29 @@ class Property
     public function getPropertyType()
     {
         return $this->propertyType;
+    }
+
+    public function addProperty(FranchiseeEntityTypeProperty $franchiseeProperty) {
+        $this->properties[] = $franchiseeProperty;
+    }
+
+    /**
+     * Remove property
+     *
+     * @param \AppBundle\Entity\FranchiseeEntityTypeProperty $property
+     */
+    public function removeProperty(\AppBundle\Entity\FranchiseeEntityTypeProperty $property)
+    {
+        $this->properties->removeElement($property);
+    }
+
+    /**
+     * Get properties
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProperties()
+    {
+        return $this->properties;
     }
 }

@@ -29,9 +29,9 @@ class Franchisee
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity="FranchiseeEntityProperty", mappedBy="franchisee")
+     * @ORM\OneToMany(targetEntity="FranchiseeEntityTypeProperty", mappedBy="franchisee", cascade={"ALL"})
      */
-    private $franchiseeEntityProperties;
+    private $properties;
 
 
     /**
@@ -39,7 +39,7 @@ class Franchisee
      */
     public function __construct()
     {
-        $this->franchiseeEntityProperties = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->properties = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -76,38 +76,27 @@ class Franchisee
         return $this->name;
     }
 
-
-    /**
-     * Add franchiseeEntityProperty
-     *
-     * @param \AppBundle\Entity\FranchiseeEntityProperty $franchiseeEntityProperty
-     *
-     * @return Franchisee
-     */
-    public function addFranchiseeEntityProperty(\AppBundle\Entity\FranchiseeEntityProperty $franchiseeEntityProperty)
-    {
-        $this->franchiseeEntityProperties[] = $franchiseeEntityProperty;
-
-        return $this;
+    public function addProperty(EntityType $entityType, Property $property) {
+        $this->properties[] = new FranchiseeEntityTypeProperty($this, $entityType, $property);
     }
 
     /**
-     * Remove franchiseeEntityProperty
+     * Remove property
      *
-     * @param \AppBundle\Entity\FranchiseeEntityProperty $franchiseeEntityProperty
+     * @param \AppBundle\Entity\FranchiseeEntityTypeProperty $property
      */
-    public function removeFranchiseeEntityProperty(\AppBundle\Entity\FranchiseeEntityProperty $franchiseeEntityProperty)
+    public function removeProperty(\AppBundle\Entity\FranchiseeEntityTypeProperty $property)
     {
-        $this->franchiseeEntityProperties->removeElement($franchiseeEntityProperty);
+        $this->properties->removeElement($property);
     }
 
     /**
-     * Get franchiseeEntityProperties
+     * Get properties
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getFranchiseeEntityProperties()
+    public function getProperties()
     {
-        return $this->franchiseeEntityProperties;
+        return $this->properties;
     }
 }

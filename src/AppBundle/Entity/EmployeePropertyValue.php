@@ -30,22 +30,14 @@ class EmployeePropertyValue
     private $value;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Employee", inversedBy="employeePropertyValues")
+     * @ORM\ManyToOne(targetEntity="Employee", inversedBy="properties")
      * @ORM\JoinColumn(name="employee_id", referencedColumnName="id")
      */
     private $employee;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="entity_type_name", type="string", length=255, nullable=false)
-     */
-    private $entityTypeName;
 
-
-    public function __construct(Employee $employee, EntityType $entityType, $value) {
+    public function __construct(Employee $employee, $value) {
         $this->employee = $employee;
-        $this->entityTypeName = $entityType;
         $this->value = $value;
     }
 

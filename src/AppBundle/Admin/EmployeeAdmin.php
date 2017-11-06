@@ -3,7 +3,7 @@
 namespace AppBundle\Admin;
 
 
-use AppBundle\Entity\FranchiseeEntityProperty;
+use AppBundle\Entity\FranchiseeEntityTypeProperty;
 use AppBundle\Form\Type\CustomPropertyType;
 use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
@@ -27,7 +27,7 @@ class EmployeeAdmin extends AbstractAdmin
 
         $aProperties = $this->getProperties();
 
-        /** @var FranchiseeEntityProperty $oProperty */
+        /** @var FranchiseeEntityTypeProperty $oProperty */
         $aPropertyKeys = [];
         foreach ($aProperties as $oProperty) {
             $aPropertyKeys[] = [
@@ -41,10 +41,10 @@ class EmployeeAdmin extends AbstractAdmin
 
         $formMapper
             ->with('Дополнительные свойства')
-            ->add('propertyValues', 'sonata_type_immutable_array', [
-                'label' => false,
-                'keys' => $aPropertyKeys,
-            ])
+                ->add('propertyValues', 'sonata_type_immutable_array', [
+                    'label' => false,
+                    'keys' => $aPropertyKeys,
+                ])
             ->end()
         ;
     }
@@ -73,7 +73,7 @@ class EmployeeAdmin extends AbstractAdmin
 
         $aProperties = $this->getProperties();
 
-        /** @var FranchiseeEntityProperty $oProperty */
+        /** @var FranchiseeEntityTypeProperty $oProperty */
         foreach ($aProperties as $oProperty) {
             $datagridMapper->add($oProperty->getCode(), CallbackFilter::class, [
                 'label' => $oProperty->getTitle(),
@@ -94,7 +94,7 @@ class EmployeeAdmin extends AbstractAdmin
 
         $aProperties = $this->getProperties();
 
-        /** @var FranchiseeEntityProperty $oProperty */
+        /** @var FranchiseeEntityTypeProperty $oProperty */
         foreach ($aProperties as $oProperty) {
             $listMapper->add($oProperty->getCode(), 'string', [
                 'label' => $oProperty->getTitle(),
@@ -102,17 +102,18 @@ class EmployeeAdmin extends AbstractAdmin
             ]);
         }
 
-        $listMapper->add('_action', 'actions', array(
-            'actions' => array(
-                'show' => array(),
-                'edit' => array(),
-                'delete' => array(),
-            )
-        ));
+        $listMapper->add('_action', 'actions', [
+            'label' => 'Действия',
+            'actions' => [
+                'edit' => [],
+                'delete' => [],
+            ]
+        ]);
     }
 
     public function getCustomPropertyFilter($queryBuilder, $alias, $field, $value) {
         if (!$value['value']['start']) return;
+
         /** @var QueryBuilder $queryBuilder */
         $queryBuilder->where($alias.'.createdAt BETWEEN :start_day AND :finish_day')
             ->setParameters([
@@ -123,7 +124,7 @@ class EmployeeAdmin extends AbstractAdmin
     }
 
     private function getProperties() {
-        $em = $this->modelManager->getEntityManager(FranchiseeEntityProperty::class);
-        return $em->getRepository(FranchiseeEntityProperty::class)->findAll();
+        $em = $this->modelManager->getEntityManager(FranchiseeEntityTypeProperty::class);
+        return $em->getRepository(FranchiseeEntityTypeProperty::class)->findAll();
     }
 }

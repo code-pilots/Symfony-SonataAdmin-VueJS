@@ -2,6 +2,7 @@
 
 namespace AppBundle\Admin;
 
+use AppBundle\Form\Type\FranchiseePropertyType;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -13,10 +14,10 @@ class FranchiseeAdmin extends AbstractAdmin
     {
         $formMapper
             ->add('name', 'text')
-            ->add('franchiseeEntityProperties', 'sonata_type_collection',
-                [],
-                ['edit' => 'inline']
-            )
+            ->add('properties', 'collection', [
+                'entry_type' => FranchiseePropertyType::class,
+                'allow_add' => true,
+            ])
         ;
     }
 

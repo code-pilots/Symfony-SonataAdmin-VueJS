@@ -45,14 +45,15 @@ class Employee
     /**
      * @ORM\OneToMany(targetEntity="EmployeePropertyValue", mappedBy="employee")
      */
-    private $employeePropertyValues;
+    private $properties;
+
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->employeePropertyValues = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->properties = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -138,36 +139,36 @@ class Employee
     }
 
     /**
-     * Add employeePropertyValue
+     * Add property
      *
-     * @param \AppBundle\Entity\EmployeePropertyValue $employeePropertyValue
+     * @param \AppBundle\Entity\Property $property
      *
      * @return Employee
      */
-    public function addEmployeePropertyValue(\AppBundle\Entity\EmployeePropertyValue $employeePropertyValue)
+    public function addProperty(\AppBundle\Entity\Property $property)
     {
-        $this->employeePropertyValues[] = $employeePropertyValue;
+        $this->properties[] = $property;
 
         return $this;
     }
 
     /**
-     * Remove employeePropertyValue
+     * Remove property
      *
-     * @param \AppBundle\Entity\EmployeePropertyValue $employeePropertyValue
+     * @param \AppBundle\Entity\Property $property
      */
-    public function removeEmployeePropertyValue(\AppBundle\Entity\EmployeePropertyValue $employeePropertyValue)
+    public function removeProperty(\AppBundle\Entity\Property $property)
     {
-        $this->employeePropertyValues->removeElement($employeePropertyValue);
+        $this->properties->removeElement($property);
     }
 
     /**
-     * Get employeePropertyValues
+     * Get properties
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getEmployeePropertyValues()
+    public function getProperties()
     {
-        return $this->employeePropertyValues;
+        return $this->properties;
     }
 }
