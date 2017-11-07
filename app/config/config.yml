@@ -70,37 +70,22 @@ swiftmailer:
     password: '%mailer_password%'
     spool: { type: memory }
 
-fos_user:
-    db_driver: orm
-    firewall_name: main
-    user_class: AppBundle\Entity\User
-    from_email:
-        address: "%mailer_user%"
-        sender_name: "%mailer_user%"
+#fos_user:
+#    db_driver: orm
+#    firewall_name: main
+#    user_class: AppBundle\Entity\User
+#    from_email:
+#        address: "%mailer_user%"
+#        sender_name: "%mailer_user%"
 
 sonata_admin:
-    title: 'HRM'
-    title_logo: bundles/sonataadmin/logo_title.png
+    title: 'Персональное решение'
+    title_logo: bundles/sonataadmin/hrm-logo.jpg
     options:
         html5_validate: false
 
-    security:
-        handler: sonata.admin.security.handler.acl
-
-        # acl security information
-        information:
-            GUEST:    [VIEW, LIST]
-            STAFF:    [EDIT, LIST, CREATE]
-            EDITOR:   [OPERATOR, EXPORT]
-            ADMIN:    [MASTER]
-
-        # permissions not related to an object instance and also to be available when objects do not exist
-        # the DELETE admin permission means the user is allowed to batch delete objects
-        admin_permissions: [CREATE, LIST, DELETE, UNDELETE, EXPORT, OPERATOR, MASTER]
-
-        # permission related to the objects
-        object_permissions: [VIEW, EDIT, DELETE, UNDELETE, OPERATOR, MASTER, OWNER]
-
+    templates:
+        layout:               'SonataAdminBundle::standard_layout.html.twig'
 
 sonata_block:
     default_contexts: [cms]
