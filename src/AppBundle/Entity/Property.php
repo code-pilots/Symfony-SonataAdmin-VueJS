@@ -24,6 +24,13 @@ class Property
     /**
      * @var string
      *
+     * @ORM\Column(name="code", type="string", length=255, nullable=true)
+     */
+    private $code;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="title", type="string", length=255, nullable=true)
      */
     private $title;
@@ -53,10 +60,16 @@ class Property
      */
     private $properties;
 
+    /**
+     * @ORM\OneToMany(targetEntity="EmployeePropertyValue", mappedBy="property", cascade={"ALL"})
+     */
+    private $propertyValues;
+
 
     public function __construct()
     {
         $this->properties = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->propertyValues = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -188,5 +201,63 @@ class Property
     public function getProperties()
     {
         return $this->properties;
+    }
+
+    /**
+     * Set code
+     *
+     * @param string $code
+     *
+     * @return Property
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * Get code
+     *
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * Add propertyValue
+     *
+     * @param \AppBundle\Entity\EmployeePropertyValue $propertyValue
+     *
+     * @return Property
+     */
+    public function addPropertyValue(\AppBundle\Entity\EmployeePropertyValue $propertyValue)
+    {
+        $this->propertyValues[] = $propertyValue;
+
+        return $this;
+    }
+
+    /**
+     * Remove propertyValue
+     *
+     * @param \AppBundle\Entity\EmployeePropertyValue $propertyValue
+     */
+    public function removePropertyValue(\AppBundle\Entity\EmployeePropertyValue $propertyValue)
+    {
+        $this->propertyValues->removeElement($propertyValue);
+    }
+
+    /**
+     * Get propertyValues
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPropertyValues()
+    {
+        return $this->propertyValues;
     }
 }

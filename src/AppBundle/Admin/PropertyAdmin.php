@@ -19,9 +19,14 @@ class PropertyAdmin extends AbstractAdmin
         /** @var Property $oProperty */
         $oProperty = $this->getSubject();
 
-//        $oFranchiseeProperty = $oProperty->getProperties()->offsetGet(0);
-//        $oFranchisee = $oFranchiseeProperty ? $oFranchiseeProperty->getFranchisee() : null;
-//        $oEntityType = $oFranchiseeProperty ? $oFranchiseeProperty->getEntityType() : null;
+        $oFranchiseeProperty = $oProperty->getProperties()->offsetGet(0);
+        $aFranchisee = $oFranchiseeProperty ? [$oFranchiseeProperty->getFranchisee()] : [];
+        $aEntityType = $oFranchiseeProperty ? [$oFranchiseeProperty->getEntityType()] : [];
+
+        $aDisabledAttribute = [];
+        if ($aFranchisee && $aEntityType) {
+            $aDisabledAttribute = ['disabled' => 'disabled'];
+        }
 
         $formMapper
             ->with('Основные настройки')
@@ -38,24 +43,26 @@ class PropertyAdmin extends AbstractAdmin
                     'property' => 'title',
                     'required' => true,
                 ])
-            ->end()
-
-            ->with('Для проверки (тесты)')
-                ->add('franchisee', 'sonata_type_model', [
-                    'label' => 'Франчайзи',
-                    'class' => Franchisee::class,
-//                    'data' => [$oFranchisee],
-                    'property' => 'name',
+                ->add('entityTypes', 'sonata_type_model', [
+                    'label' => 'Тип сущности',
+                    'class' => EntityType::class,
+                    'data' => $aEntityType,
+                    'property' => 'title',
+                    'attr' => array_merge([], $aDisabledAttribute),
                     'expanded' => false,
                     'multiple' => true,
                     'required' => true,
                     'mapped' => false,
                 ])
-                ->add('entityTypes', 'sonata_type_model', [
-                    'label' => 'Тип сущности',
-                    'class' => EntityType::class,
-//                    'data' => [$oEntityType],
-                    'property' => 'title',
+            ->end()
+
+            ->with('Для проверки (тест)')
+                ->add('franchisee', 'sonata_type_model', [
+                    'label' => 'Франчайзи',
+                    'class' => Franchisee::class,
+                    'data' => $aFranchisee,
+                    'property' => 'name',
+                    'attr' => array_merge([], $aDisabledAttribute),
                     'expanded' => false,
                     'multiple' => true,
                     'required' => true,
@@ -73,20 +80,20 @@ class PropertyAdmin extends AbstractAdmin
         ;
     }
 
-//    public function prePersist($entity) {
-//        /** @var Property $oProperty */
-//        $oProperty = $entity;
-//
-//        if ($oProperty->getProperties()->count()) {
-//            return;
-//        }
-//
-//        $oFranchisee = $this->getForm()->get('franchisee')->getData()->offsetGet(0);
-//        $oEntityType = $this->getForm()->get('entityTypes')->getData()->offsetGet(0);
-//
-//        $oFranchiseeProperty = new FranchiseeEntityTypeProperty($oFranchisee, $oEntityType, $oProperty);
-//        $oProperty->addProperty($oFranchiseeProperty);
-//    }
+    public function prePersist($entity) {
+        /** @var Property $oProperty */
+        $oProperty = $entity;
+
+        if ($oProperty->getProperties()->count()) {
+            return;
+        }
+
+        $oFranchisee = $this->getForm()->get('franchisee')->getData()->offsetGet(0);
+        $oEntityType = $this->getForm()->get('entityTypes')->getData()->offsetGet(0);
+
+        $oFranchiseeProperty = new FranchiseeEntityTypeProperty($oFranchisee, $oEntityType, $oProperty);
+        $oProperty->addProperty($oFranchiseeProperty);
+    }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {

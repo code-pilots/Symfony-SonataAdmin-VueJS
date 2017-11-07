@@ -35,9 +35,16 @@ class EmployeePropertyValue
      */
     private $employee;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Property", inversedBy="propertyValues")
+     * @ORM\JoinColumn(name="property_id", referencedColumnName="id")
+     */
+    private $property;
 
-    public function __construct(Employee $employee, $value) {
+
+    public function __construct(Employee $employee, Property $property, $value) {
         $this->employee = $employee;
+        $this->property = $property;
         $this->value = $value;
     }
 
@@ -82,7 +89,7 @@ class EmployeePropertyValue
      *
      * @return EmployeePropertyValue
      */
-    public function setEmployee(\AppBundle\Entity\Employee $employee = null)
+    public function setEmployee(\AppBundle\Entity\Employee $employee)
     {
         $this->employee = $employee;
 
@@ -99,4 +106,28 @@ class EmployeePropertyValue
         return $this->employee;
     }
 
+
+    /**
+     * Set property
+     *
+     * @param \AppBundle\Entity\Property $property
+     *
+     * @return EmployeePropertyValue
+     */
+    public function setProperty(\AppBundle\Entity\Property $property)
+    {
+        $this->property = $property;
+
+        return $this;
+    }
+
+    /**
+     * Get property
+     *
+     * @return \AppBundle\Entity\Property
+     */
+    public function getProperty()
+    {
+        return $this->property;
+    }
 }

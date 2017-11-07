@@ -43,7 +43,7 @@ class Employee
     private $middlename;
 
     /**
-     * @ORM\OneToMany(targetEntity="EmployeePropertyValue", mappedBy="employee")
+     * @ORM\OneToMany(targetEntity="EmployeePropertyValue", mappedBy="employee", cascade={"ALL"})
      */
     private $properties;
 
@@ -138,14 +138,15 @@ class Employee
         return $this->middlename;
     }
 
+
     /**
      * Add property
      *
-     * @param \AppBundle\Entity\Property $property
+     * @param \AppBundle\Entity\EmployeePropertyValue $property
      *
      * @return Employee
      */
-    public function addProperty(\AppBundle\Entity\Property $property)
+    public function addProperty(\AppBundle\Entity\EmployeePropertyValue $property)
     {
         $this->properties[] = $property;
 
@@ -155,9 +156,9 @@ class Employee
     /**
      * Remove property
      *
-     * @param \AppBundle\Entity\Property $property
+     * @param \AppBundle\Entity\EmployeePropertyValue $property
      */
-    public function removeProperty(\AppBundle\Entity\Property $property)
+    public function removeProperty(\AppBundle\Entity\EmployeePropertyValue $property)
     {
         $this->properties->removeElement($property);
     }

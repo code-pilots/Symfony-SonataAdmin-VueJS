@@ -14,10 +14,6 @@ class FranchiseeAdmin extends AbstractAdmin
     {
         $formMapper
             ->add('name', 'text')
-            ->add('properties', 'collection', [
-                'entry_type' => FranchiseePropertyType::class,
-                'allow_add' => true,
-            ])
         ;
     }
 

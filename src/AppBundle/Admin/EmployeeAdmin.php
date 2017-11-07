@@ -3,8 +3,11 @@
 namespace AppBundle\Admin;
 
 
+use AppBundle\Entity\Employee;
+use AppBundle\Entity\EmployeePropertyValue;
 use AppBundle\Entity\FranchiseeEntityTypeProperty;
-use AppBundle\Form\Type\CustomPropertyType;
+use AppBundle\Entity\Property;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -15,8 +18,24 @@ use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
 
 class EmployeeAdmin extends AbstractAdmin
 {
+    public function configure()
+    {
+        parent::configure();
+        $this->classnameLabel = 'Работники';
+    }
+
     protected function configureFormFields(FormMapper $formMapper)
     {
+        /** @var Employee $oEmployee */
+        $oEmployee = $this->getSubject();
+        $cPropertyValues = $oEmployee->getProperties();
+
+        $aPropertyValues = [];
+        foreach ($cPropertyValues as $oPropertyValue) {
+            $oProperty = $oPropertyValue->getProperty();
+            $aPropertyValues[$oProperty->getId()] = $oPropertyValue;
+        }
+
         $formMapper
             ->with('General')
                 ->add('firstname', 'text')
@@ -25,28 +44,57 @@ class EmployeeAdmin extends AbstractAdmin
             ->end()
         ;
 
-        $aProperties = $this->getProperties();
-
-        /** @var FranchiseeEntityTypeProperty $oProperty */
         $aPropertyKeys = [];
-        foreach ($aProperties as $oProperty) {
+        $aFranchiseeEntityTypeProperties = $this->getProperties();
+
+        /** @var FranchiseeEntityTypeProperty $oFranchiseeEntityTypeProperty */
+        foreach ($aFranchiseeEntityTypeProperties as $oFranchiseeEntityTypeProperty) {
+            /** @var Property $oProperty */
+            $oProperty = $oFranchiseeEntityTypeProperty->getProperty();
+            
             $aPropertyKeys[] = [
                 $oProperty->getCode(),
-                $oProperty->getPropertyType()->getCode(),
+                'text', // @TODO: $oProperty->getPropertyType()->getCode()
                 [
                     'label' => $oProperty->getTitle(),
+                    'data' => !empty($aPropertyValues[$oProperty->getId()]) ? $aPropertyValues[$oProperty->getId()]->getValue() : '',
                 ]
             ];
         }
 
         $formMapper
             ->with('Дополнительные свойства')
-                ->add('propertyValues', 'sonata_type_immutable_array', [
+                ->add('properties', 'sonata_type_immutable_array', [
                     'label' => false,
+                    'mapped' => false,
                     'keys' => $aPropertyKeys,
                 ])
             ->end()
         ;
+    }
+
+    // @todo: изменение полей
+    public function prePersist($entity) {
+        /** @var Employee $oEmployee */
+        $oEmployee = $entity;
+
+        $aFranchiseeEntityTypeProperties = $this->getProperties();
+        $aFormProperties = $this->getForm()->get('properties')->getData();
+
+        /** @var FranchiseeEntityTypeProperty $oFranchiseeEntityTypeProperty */
+        foreach ($aFranchiseeEntityTypeProperties as $oFranchiseeEntityTypeProperty) {
+            /** @var Property $oProperty */
+            $oProperty = $oFranchiseeEntityTypeProperty->getProperty();
+            $sPropertyCode = $oProperty->getCode();
+
+            if (!isset($aFormProperties[$sPropertyCode]) || empty($aFormProperties[$sPropertyCode])) {
+                continue;
+            }
+
+            $mPropertyValue = $aFormProperties[$sPropertyCode];
+            $oEmployeePropertyValue = new EmployeePropertyValue($oEmployee, $oProperty, $mPropertyValue);
+            $oEmployee->addProperty($oEmployeePropertyValue);
+        }
     }
 
     public function validate(ErrorElement $errorElement, $object)
@@ -71,10 +119,13 @@ class EmployeeAdmin extends AbstractAdmin
             ->add('middlename')
         ;
 
-        $aProperties = $this->getProperties();
+        $aFranchiseeEntityTypeProperties = $this->getProperties();
 
-        /** @var FranchiseeEntityTypeProperty $oProperty */
-        foreach ($aProperties as $oProperty) {
+        /** @var FranchiseeEntityTypeProperty $oFranchiseeEntityTypeProperty */
+        foreach ($aFranchiseeEntityTypeProperties as $oFranchiseeEntityTypeProperty) {
+            /** @var Property $oProperty */
+            $oProperty = $oFranchiseeEntityTypeProperty->getProperty();
+
             $datagridMapper->add($oProperty->getCode(), CallbackFilter::class, [
                 'label' => $oProperty->getTitle(),
                 'callback' => [$this, 'getCustomPropertyFilter'],
@@ -90,17 +141,12 @@ class EmployeeAdmin extends AbstractAdmin
             ->addIdentifier('firstname')
             ->addIdentifier('lastname')
             ->addIdentifier('middlename')
-        ;
-
-        $aProperties = $this->getProperties();
-
-        /** @var FranchiseeEntityTypeProperty $oProperty */
-        foreach ($aProperties as $oProperty) {
-            $listMapper->add($oProperty->getCode(), 'string', [
-                'label' => $oProperty->getTitle(),
+            ->add('properties.value')
+            ->add('customFields', 'string', [
+                'label' => 'Дополнительные свойства',
                 'template' => ':Admin/entity_list:custom_column.html.twig',
-            ]);
-        }
+            ])
+        ;
 
         $listMapper->add('_action', 'actions', [
             'label' => 'Действия',
@@ -111,20 +157,26 @@ class EmployeeAdmin extends AbstractAdmin
         ]);
     }
 
+    /**
+     * SELECT * FROM employee e
+     * LEFT JOIN employee__property_value epv ON epv.property_id = (SELECT id FROM property WHERE property.code = 'rost')
+     * WHERE epv.employee_id = e.id AND epv.value LIKE '%180%';
+     */
     public function getCustomPropertyFilter($queryBuilder, $alias, $field, $value) {
-        if (!$value['value']['start']) return;
+        if (empty($value['value'])) return;
 
         /** @var QueryBuilder $queryBuilder */
-        $queryBuilder->where($alias.'.createdAt BETWEEN :start_day AND :finish_day')
-            ->setParameters([
-                'start_day' => $value['value']['start'],
-                'finish_day' => $value['value']['end'],
-            ]);
-        return true;
+        $queryBuilder
+            ->where("{$alias}.properties.property = :test")
+            ->setParameter('test', 3)
+        ;
     }
 
     private function getProperties() {
         $em = $this->modelManager->getEntityManager(FranchiseeEntityTypeProperty::class);
-        return $em->getRepository(FranchiseeEntityTypeProperty::class)->findAll();
+        return $em->getRepository(FranchiseeEntityTypeProperty::class)->findBy([
+            'franchisee' => 1,
+            'entityType' => 1,
+        ]);
     }
 }

@@ -12,8 +12,12 @@ class EntityTypeAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('code', 'text')
-            ->add('title', 'text')
+            ->add('code', 'text', [
+                'required' => true,
+            ])
+            ->add('title', 'text', [
+                'required' => true,
+            ])
         ;
     }
 
