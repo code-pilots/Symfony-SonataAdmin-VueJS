@@ -8,7 +8,7 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="less">
   #app-hello {
     display: flex;
     margin-top: 60px;

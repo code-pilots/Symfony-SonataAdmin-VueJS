@@ -1,7 +1,7 @@
 let Encore = require('@symfony/webpack-encore');
 
 Encore
-// directory where all compiled assets will be stored
+    // directory where all compiled assets will be stored
     .setOutputPath('web/build/')
 
     // what's the public path to this directory (relative to your project's document root dir)
@@ -14,10 +14,10 @@ Encore
     .addEntry('app', './assets/vue/main.js')
 
     // will output as web/build/global.css
-    .addStyleEntry('global', './assets/css/global.scss')
+    .addStyleEntry('global', './assets/css/global.less')
 
-    // allow sass/scss files to be processed
-    .enableSassLoader()
+    // allow less files to be processed
+    .enableLessLoader()
 
     // allow legacy applications to use $/jQuery as a global variable
     .autoProvidejQuery()
