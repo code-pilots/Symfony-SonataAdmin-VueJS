@@ -78,14 +78,14 @@ swiftmailer:
 #        address: "%mailer_user%"
 #        sender_name: "%mailer_user%"
 
-sonata_admin:
-    title: 'Персональное решение'
-    title_logo: bundles/sonataadmin/hrm-logo.jpg
-    options:
-        html5_validate: false
+#sonata_admin:
+#    title: 'My project'
+#    title_logo: bundles/sonataadmin/logo.jpg
+#    options:
+#        html5_validate: false
 
-    templates:
-        layout:               'SonataAdminBundle::standard_layout.html.twig'
+#    templates:
+#        layout:               'SonataAdminBundle::standard_layout.html.twig'
 
 sonata_block:
     default_contexts: [cms]
