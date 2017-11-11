@@ -1,7 +1,7 @@
 Symfony3.3.2-VueJS2
 ===================
 
-A Symfony + Sonata Admin project created on October 29, 2017, 11:04 am.
+A Symfony + Sonata Admin + VueJS project created on October 29, 2017, 11:04 am.
 
 
 First steps:
