@@ -18,7 +18,6 @@ First steps:
 * composer install
 * bower install ./vendor/sonata-project/admin-bundle/bower.json
 * yarn install
-* npm install
 
 
 Run scripts:
@@ -27,4 +26,3 @@ Run scripts:
 * yarn run encore dev
 * yarn run encore dev --watch
 * yarn run encore production
-* ./node_modules/.bin/encore dev-server --hot
