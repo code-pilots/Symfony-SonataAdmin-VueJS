@@ -1,11 +1,14 @@
 {
-  "name": "Symfony3.3.2-VueJS2",
+  "name": "Symfony",
   "version": "0.0.1",
   "dependencies": {
     "buefy": "^0.5.4"
   },
+  "scripts": {
+    "dev": "./node_modules/.bin/encore dev-server"
+  },
   "devDependencies": {
-    "@symfony/webpack-encore": "^0.16.0",
+    "@symfony/webpack-encore": "^0.17.0",
     "less": "^2.7.3",
     "less-loader": "^4.0.5",
     "vue": "^2.5.3",
