@@ -87,9 +87,9 @@ swiftmailer:
 #    templates:
 #        layout:               'SonataAdminBundle::standard_layout.html.twig'
 
-sonata_block:
-    default_contexts: [cms]
-    blocks:
-        # enable the SonataAdminBundle block
-        sonata.admin.block.admin_list:
-            contexts: [admin]
+#sonata_block:
+#    default_contexts: [cms]
+#    blocks:
+#        # enable the SonataAdminBundle block
+#        sonata.admin.block.admin_list:
+#            contexts: [admin]
