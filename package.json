@@ -1,5 +1,5 @@
 {
-    "name": "Symfony",
+    "name": "Symfony-SonataAdmin-VueJS-Starter",
     "version": "0.0.1",
     "dependencies": {
         "buefy": "^0.5.4"

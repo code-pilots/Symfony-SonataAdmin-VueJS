@@ -1,5 +1,5 @@
 {
-    "name": "oksana/Symfony3.3.2-VueJS2",
+    "name": "Symfony-SonataAdmin-VueJS-Starter",
     "license": "proprietary",
     "type": "project",
     "autoload": {
