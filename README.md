@@ -15,14 +15,26 @@ Additional dependencies:
 First steps:
 ------------
 
-* composer install
-* bower install ./vendor/sonata-project/admin-bundle/bower.json
-* yarn install
+1. Install project dependencies:
+
+```composer install```
+
+2. Update Sonata Admin front-end libraries (optional):
+
+```bower install ./vendor/sonata-project/admin-bundle/bower.json```
+
+3. Install project front-end libraries:
+
+```yarn install```
+
+4. Build assets for dev environment:
+
+```yarn run encore dev```
 
 
-Run scripts:
-------------
+Build assets:
+-------------
 
-* yarn run encore dev
-* yarn run encore dev --watch
-* yarn run encore production
+* `yarn run encore dev`
+* `yarn run encore dev --watch`
+* `yarn run encore production`
