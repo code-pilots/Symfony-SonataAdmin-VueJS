@@ -1,18 +1,18 @@
 {
-  "name": "Symfony",
-  "version": "0.0.1",
-  "dependencies": {
-    "buefy": "^0.5.4"
-  },
-  "scripts": {
-    "dev": "./node_modules/.bin/encore dev-server"
-  },
-  "devDependencies": {
-    "@symfony/webpack-encore": "^0.17.0",
-    "less": "^2.7.3",
-    "less-loader": "^4.0.5",
-    "vue": "^2.5.3",
-    "vue-loader": "^13.4.0",
-    "vue-template-compiler": "^2.5.3"
-  }
+    "name": "Symfony",
+    "version": "0.0.1",
+    "dependencies": {
+        "buefy": "^0.5.4"
+    },
+    "scripts": {
+        "dev": "./node_modules/.bin/encore dev-server"
+    },
+    "devDependencies": {
+        "@symfony/webpack-encore": "^0.17.0",
+        "less": "^2.7.3",
+        "less-loader": "^4.0.5",
+        "vue": "^2.5.3",
+        "vue-loader": "^13.4.0",
+        "vue-template-compiler": "^2.5.3"
+    }
 }
