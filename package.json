@@ -2,7 +2,7 @@
     "name": "Symfony-SonataAdmin-VueJS-Starter",
     "version": "0.0.1",
     "dependencies": {
-        "buefy": "^0.5.4"
+        "buefy": "^0.7.2"
     },
     "scripts": {
         "dev": "./node_modules/.bin/encore dev-server"
